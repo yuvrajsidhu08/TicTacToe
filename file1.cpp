@@ -2,18 +2,15 @@
 #include <cstring>
 using namespace std;
 
-char board[3][3], m[3], player = 'X';
-int x = 0, o = 0, t = 0;
-
 // Resets the board
-void resetboard() {
+void resetboard(char board[3][3]) {
     for (int i = 0; i < 3; i++)
         for (int j = 0; j < 3; j++)
             board[i][j] = ' ';
 }
 
 // Displays the board and the score
-void display() {
+void display(const char board[3][3], int x, int o, int t) {
     cout << "\n 123\n";
     for (int i = 0; i < 3; i++) {
         cout << (char)('a'+i);
@@ -23,9 +20,8 @@ void display() {
     }
     cout << "X:" << x << " O:" << o << " T:" << t << "\n\n";
 }
-
 // Checks if the player has won
-char winner() {
+char winner(const char board[3][3]) {
     for (int i = 0; i < 3; i++) {
         if (board[i][0]==board[i][1] && board[i][1]==board[i][2] && board[i][0]!=' ') return board[i][0];
         if (board[0][i]==board[1][i] && board[1][i]==board[2][i] && board[0][i]!=' ') return board[0][i];
@@ -36,20 +32,24 @@ char winner() {
 }
 
 // Checks for a tie
-bool tie() {
+bool tie(const char board[3][3]) {
     for (int i=0;i<3;i++) for (int j=0;j<3;j++) if (board[i][j]==' ') return false;
     return true;
 }
 
 int main() {
+    char board[3][3];
+    char m[3];
+    char player = 'X';
+    int x = 0, o = 0, t = 0;
     int r1, c1;
 
     // Start with an empty board
-    resetboard();
+    resetboard(board);
     while (true) {
 
       // Shows the board and the scores
-        display();
+      display(board, x, o, t);
         cout << player << ": ";
         cin >> m;
         if (strlen(m)!=2) continue;
@@ -58,10 +58,10 @@ int main() {
         board[r1][c1]=player;
 
 	// Checks for win and handles it
-        char win = winner();
-        if (win=='X') { x++; resetboard(); player='X'; continue; }
-        if (win=='O') { o++; resetboard(); player='X'; continue; }
-        if (tie()) { t++; resetboard(); player='X'; continue; }
+        char win = winner(board);
+        if (win=='X') { x++; resetboard(board); player='X'; continue; }
+        if (win=='O') { o++; resetboard(board); player='X'; continue; }
+        if (tie(board)) { t++; resetboard(board); player='X'; continue; }
         player = (player=='X') ? 'O' : 'X';
     }
 }
